@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Menu, X, ChevronDown, ChevronRight, Home, Calendar, Camera, Settings, Users, MapPin, Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -127,9 +128,11 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-museum-blue to-museum-blue-light rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">HIT</span>
-            </div>
+            <img 
+              src="/lovable-uploads/5490f128-819a-40bc-a7fd-6b0c15f83d85.png" 
+              alt="Hellenic IT Museum Logo" 
+              className="w-10 h-10 rounded-xl"
+            />
             <div>
               <h1 className="font-display font-bold text-gray-900 text-lg leading-tight">
                 {t.siteName}
