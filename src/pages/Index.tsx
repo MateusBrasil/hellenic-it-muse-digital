@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import ThemeToggle from '@/components/ThemeToggle';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
 
@@ -16,7 +17,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white font-inter">
+    <div className="min-h-screen bg-background text-foreground font-inter transition-colors">
       {/* Navigation */}
       <Navigation isOpen={isSidebarOpen} onToggle={toggleSidebar} />
       
@@ -24,25 +25,27 @@ const Index = () => {
       <div className="lg:ml-80 min-h-screen">
         
         {/* Top Bar for Mobile */}
-        <div className="lg:hidden fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-xl border-b border-gray-100">
+        <div className="lg:hidden fixed top-0 left-0 right-0 z-30 bg-background/95 backdrop-blur-xl border-b border-border">
           <div className="flex items-center justify-between p-4">
             <Button
               variant="ghost"
               size="sm"
               onClick={toggleSidebar}
-              className="text-gray-700"
+              className="text-foreground"
             >
               <Menu className="w-6 h-6" />
             </Button>
             
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-museum-blue to-museum-blue-light rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">HIT</span>
-              </div>
-              <span className="font-semibold text-gray-900">{t.siteName}</span>
+              <img 
+                src="/lovable-uploads/5490f128-819a-40bc-a7fd-6b0c15f83d85.png" 
+                alt="Hellenic IT Museum Logo" 
+                className="w-8 h-8"
+              />
+              <span className="font-semibold text-foreground">{t.siteName}</span>
             </div>
             
-            <div className="w-10" />
+            <ThemeToggle />
           </div>
         </div>
 
@@ -58,12 +61,12 @@ const Index = () => {
             {/* Don't Miss Section Preview */}
             <div className="mb-20">
               <div className="text-center mb-12">
-                <h2 className={`font-display font-bold text-gray-900 mb-4 ${
+                <h2 className={`font-display font-bold text-foreground mb-4 ${
                   currentVersion === 'easy' ? 'text-3xl lg:text-4xl' : 'text-4xl lg:text-5xl'
                 }`}>
                   {t.dontMiss.title}
                 </h2>
-                <p className={`text-gray-600 max-w-3xl mx-auto ${
+                <p className={`text-muted-foreground max-w-3xl mx-auto ${
                   currentVersion === 'easy' ? 'text-lg' : 'text-xl'
                 }`}>
                   {t.dontMiss.subtitle}
@@ -74,7 +77,7 @@ const Index = () => {
                 {t.dontMiss.items.map((item: any, index: number) => (
                   <div 
                     key={index}
-                    className="group bg-white rounded-2xl shadow-museum hover:shadow-museum-lg transition-all duration-300 overflow-hidden animate-scale-in"
+                    className="group bg-card rounded-2xl shadow-museum hover:shadow-museum-lg transition-all duration-300 overflow-hidden animate-scale-in"
                     style={{ animationDelay: `${index * 0.2}s` }}
                   >
                     <div className="relative">
@@ -95,10 +98,10 @@ const Index = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                     <div className="p-6">
-                      <h3 className="font-semibold text-gray-900 text-lg mb-2 group-hover:text-museum-blue transition-colors">
+                      <h3 className="font-semibold text-card-foreground text-lg mb-2 group-hover:text-museum-blue transition-colors">
                         {item.title}
                       </h3>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-muted-foreground text-sm">
                         {item.description}
                       </p>
                     </div>
@@ -121,13 +124,13 @@ const Index = () => {
                 return (
                   <div 
                     key={index}
-                    className="group relative bg-white rounded-2xl p-6 shadow-museum hover:shadow-museum-lg transition-all duration-300 cursor-pointer overflow-hidden"
+                    className="group relative bg-card rounded-2xl p-6 shadow-museum hover:shadow-museum-lg transition-all duration-300 cursor-pointer overflow-hidden"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${colors[index]} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
                     <div className="relative z-10">
                       <div className="text-3xl mb-3">{icons[index]}</div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{action.title}</h3>
-                      <p className="text-sm text-gray-600">{action.description}</p>
+                      <h3 className="font-semibold text-card-foreground mb-1">{action.title}</h3>
+                      <p className="text-sm text-muted-foreground">{action.description}</p>
                     </div>
                   </div>
                 );
