@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { Menu, X, ChevronDown, ChevronRight, Home, Calendar, Camera, Settings, Users, MapPin, Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage, LanguageVersion } from '@/contexts/LanguageContext';
 
 interface NavigationProps {
   isOpen: boolean;
@@ -10,6 +10,8 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
+  const { currentVersion, setCurrentVersion, translations } = useLanguage();
+  const t = translations[currentVersion];
 
   const toggleSubmenu = (menuId: string) => {
     setExpandedMenus(prev => 
@@ -19,16 +21,21 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
     );
   };
 
+  const handleLanguageChange = (version: LanguageVersion) => {
+    setCurrentVersion(version);
+    console.log('Language changed to:', version);
+  };
+
   const navigationItems = [
     {
       id: 'home',
-      title: 'Home',
+      title: t.navigation.home,
       icon: Home,
       href: '/'
     },
     {
       id: 'exhibits',
-      title: 'Exhibits',
+      title: t.navigation.exhibits,
       icon: Camera,
       submenu: [
         { title: 'Permanent Collection', href: '/exhibits/permanent' },
@@ -41,7 +48,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
     },
     {
       id: 'visit',
-      title: 'Visit',
+      title: t.navigation.visit,
       icon: MapPin,
       submenu: [
         { title: 'Plan Your Visit', href: '/visit' },
@@ -54,7 +61,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
     },
     {
       id: 'tickets',
-      title: 'E-Tickets',
+      title: t.navigation.tickets,
       icon: Calendar,
       submenu: [
         { title: 'Buy Individual Tickets', href: '/tickets/individual' },
@@ -65,7 +72,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
     },
     {
       id: 'activities',
-      title: 'Activities',
+      title: t.navigation.activities,
       icon: Users,
       submenu: [
         { title: 'Educational Programs', href: '/activities/education' },
@@ -77,14 +84,14 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
     },
     {
       id: 'virtual-tour',
-      title: '3D Virtual Tour',
+      title: t.navigation.virtualTour,
       icon: Camera,
       href: '/virtual-tour',
       special: true
     },
     {
       id: 'support',
-      title: 'Support Us',
+      title: t.navigation.support,
       icon: Settings,
       submenu: [
         { title: 'Adopt a Computer', href: '/support/adopt', special: true },
@@ -95,6 +102,12 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
       ]
     }
   ];
+
+  const getLanguageButtonStyle = (version: LanguageVersion) => {
+    return currentVersion === version
+      ? "flex-1 py-2 px-3 text-xs font-medium bg-museum-blue text-white rounded-md transition-colors"
+      : "flex-1 py-2 px-3 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-md transition-colors";
+  };
 
   return (
     <>
@@ -119,9 +132,9 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
             </div>
             <div>
               <h1 className="font-display font-bold text-gray-900 text-lg leading-tight">
-                Hellenic IT Museum
+                {t.siteName}
               </h1>
-              <p className="text-xs text-museum-gray">Digital Heritage Experience</p>
+              <p className="text-xs text-museum-gray">{t.tagline}</p>
             </div>
           </div>
           <Button
@@ -137,13 +150,22 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
         {/* Language Selector */}
         <div className="p-4 border-b border-gray-100">
           <div className="flex space-x-2">
-            <button className="flex-1 py-2 px-3 text-xs font-medium bg-museum-blue text-white rounded-md transition-colors">
+            <button 
+              onClick={() => handleLanguageChange('en')}
+              className={getLanguageButtonStyle('en')}
+            >
               🇬🇧 EN
             </button>
-            <button className="flex-1 py-2 px-3 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
+            <button 
+              onClick={() => handleLanguageChange('gr')}
+              className={getLanguageButtonStyle('gr')}
+            >
               🇬🇷 GR
             </button>
-            <button className="flex-1 py-2 px-3 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
+            <button 
+              onClick={() => handleLanguageChange('easy')}
+              className={getLanguageButtonStyle('easy')}
+            >
               🔵 Easy
             </button>
           </div>
@@ -221,7 +243,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
           <div className="space-y-3">
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <MapPin className="w-4 h-4" />
-              <span>Athens, Greece</span>
+              <span>{t.footer.location}</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Phone className="w-4 h-4" />
@@ -232,7 +254,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, onToggle }) => {
               <span>info@elmp.gr</span>
             </div>
             <div className="pt-2 text-xs text-gray-500">
-              © 2024 Hellenic IT Museum®
+              {t.footer.copyright}
             </div>
           </div>
         </div>

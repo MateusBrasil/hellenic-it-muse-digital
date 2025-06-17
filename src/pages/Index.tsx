@@ -2,11 +2,14 @@
 import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
 
 const Index = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { currentVersion, translations } = useLanguage();
+  const t = translations[currentVersion];
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -36,7 +39,7 @@ const Index = () => {
               <div className="w-8 h-8 bg-gradient-to-br from-museum-blue to-museum-blue-light rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xs">HIT</span>
               </div>
-              <span className="font-semibold text-gray-900">Hellenic IT Museum</span>
+              <span className="font-semibold text-gray-900">{t.siteName}</span>
             </div>
             
             <div className="w-10" />
@@ -55,35 +58,20 @@ const Index = () => {
             {/* Don't Miss Section Preview */}
             <div className="mb-20">
               <div className="text-center mb-12">
-                <h2 className="text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-4">
-                  Don't Miss These! ⭐
+                <h2 className={`font-display font-bold text-gray-900 mb-4 ${
+                  currentVersion === 'easy' ? 'text-3xl lg:text-4xl' : 'text-4xl lg:text-5xl'
+                }`}>
+                  {t.dontMiss.title}
                 </h2>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                  Our most popular and remarkable exhibits that visitors absolutely love
+                <p className={`text-gray-600 max-w-3xl mx-auto ${
+                  currentVersion === 'easy' ? 'text-lg' : 'text-xl'
+                }`}>
+                  {t.dontMiss.subtitle}
                 </p>
               </div>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[
-                  {
-                    title: "Apple Lisa Computer",
-                    description: "The revolutionary GUI pioneer from 1983",
-                    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop&q=80",
-                    badge: "Rare Find"
-                  },
-                  {
-                    title: "UNIX Source Code",
-                    description: "Original Bell Labs documentation",
-                    image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=400&h=300&fit=crop&q=80",
-                    badge: "Historical"
-                  },
-                  {
-                    title: "Gaming Evolution",
-                    description: "From Pong to PlayStation",
-                    image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&h=300&fit=crop&q=80",
-                    badge: "Interactive"
-                  }
-                ].map((item, index) => (
+                {t.dontMiss.items.map((item: any, index: number) => (
                   <div 
                     key={index}
                     className="group bg-white rounded-2xl shadow-museum hover:shadow-museum-lg transition-all duration-300 overflow-hidden animate-scale-in"
@@ -91,7 +79,11 @@ const Index = () => {
                   >
                     <div className="relative">
                       <img 
-                        src={item.image} 
+                        src={
+                          index === 0 ? "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop&q=80" :
+                          index === 1 ? "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=400&h=300&fit=crop&q=80" :
+                          "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&h=300&fit=crop&q=80"
+                        }
                         alt={item.title}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -117,44 +109,29 @@ const Index = () => {
 
             {/* Quick Actions */}
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  title: "Virtual Tour",
-                  description: "Explore from home",
-                  icon: "🎥",
-                  color: "from-blue-500 to-purple-600"
-                },
-                {
-                  title: "Buy Tickets",
-                  description: "Skip the line",
-                  icon: "🎫", 
-                  color: "from-green-500 to-teal-600"
-                },
-                {
-                  title: "Adopt Computer",
-                  description: "Support heritage",
-                  icon: "💻",
-                  color: "from-orange-500 to-red-600"
-                },
-                {
-                  title: "School Programs",
-                  description: "Educational visits",
-                  icon: "🎓",
-                  color: "from-purple-500 to-pink-600"
-                }
-              ].map((action, index) => (
-                <div 
-                  key={index}
-                  className="group relative bg-white rounded-2xl p-6 shadow-museum hover:shadow-museum-lg transition-all duration-300 cursor-pointer overflow-hidden"
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-                  <div className="relative z-10">
-                    <div className="text-3xl mb-3">{action.icon}</div>
-                    <h3 className="font-semibold text-gray-900 mb-1">{action.title}</h3>
-                    <p className="text-sm text-gray-600">{action.description}</p>
+              {t.quickActions.map((action: any, index: number) => {
+                const icons = ["🎥", "🎫", "💻", "🎓"];
+                const colors = [
+                  "from-blue-500 to-purple-600",
+                  "from-green-500 to-teal-600", 
+                  "from-orange-500 to-red-600",
+                  "from-purple-500 to-pink-600"
+                ];
+                
+                return (
+                  <div 
+                    key={index}
+                    className="group relative bg-white rounded-2xl p-6 shadow-museum hover:shadow-museum-lg transition-all duration-300 cursor-pointer overflow-hidden"
+                  >
+                    <div className={`absolute inset-0 bg-gradient-to-br ${colors[index]} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
+                    <div className="relative z-10">
+                      <div className="text-3xl mb-3">{icons[index]}</div>
+                      <h3 className="font-semibold text-gray-900 mb-1">{action.title}</h3>
+                      <p className="text-sm text-gray-600">{action.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
